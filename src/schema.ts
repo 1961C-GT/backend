@@ -31,7 +31,7 @@ const typeDefs = gql`
   }
 
   type NodeOrientation {
-    heading: Int!
+    heading: Float!
     source: NodeOrientationSource
   }
 
@@ -41,7 +41,7 @@ const typeDefs = gql`
   }
 
   type NodeTelemetry {
-    groundSpeed: Float
+    groundSpeed: Float #
     # Other telemetry data goes here
   }
 `;
