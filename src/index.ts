@@ -1,4 +1,8 @@
-import { ApolloServer, MockList } from "apollo-server";
+import * as express from 'express';
+import { ApolloServer, MockList } from 'apollo-server-express';
+import * as fs from 'fs';
+import * as https from 'https';
+import * as http from 'http';
 import * as casual from "casual";
 import typeDefs from "./schema";
 
@@ -27,8 +31,23 @@ const mocks = {
   })
 };
 
-const server = new ApolloServer({ typeDefs, mocks });
+const apollo = new ApolloServer({ typeDefs, mocks });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-});
+const app = express();
+apollo.applyMiddleware({ app });
+
+// Create the HTTPS or HTTP server, per configuration
+const server = https.createServer(
+  {
+    key: fs.readFileSync('/etc/letsencrypt/live/mnslac.xtriage.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/mnslac.xtriage.com/cert.pem')
+  },
+  app
+);
+
+server.listen(4000, () =>
+  console.log(
+    '🚀 Server ready at',
+    `https://localhost:4000${apollo.graphqlPath}`
+  )
+);
