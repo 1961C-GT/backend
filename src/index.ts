@@ -1,5 +1,5 @@
 import { ApolloServer, MockList } from "apollo-server";
-import casual = require("casual");
+import * as casual from "casual";
 import typeDefs from "./schema";
 
 casual.define("position", () => ({

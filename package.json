@@ -5,15 +5,18 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@types/graphql": "^14.0.7",
     "apollo-server": "^2.4.0",
     "casual": "^1.6.0",
     "graphql": "^14.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.10",
-    "prettier": "1.16.4"
+    "prettier": "1.16.4",
+    "typescript": "^3.3.3"
   },
   "scripts": {
-    "start": "nodemon lib/index.js"
+    "start": "nodemon lib/index.js",
+    "build": "tsc"
   }
 }
