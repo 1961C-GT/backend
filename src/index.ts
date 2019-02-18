@@ -3,17 +3,17 @@ import casual = require("casual");
 import typeDefs from "./schema";
 
 casual.define("position", () => ({
-  // Lock coordinates around LLSC
-  // 34.2181425, -83.9564373
-  lat: casual.double(34.2131425, 34.2231425),
-  lon: casual.double(-83.9514373, -83.9614373)
+  // Lock coordinates around Chattahoochee Bay
+  // 34.2112456, -83.9658699
+  lat: casual.double(34.2112456, 34.2212456),
+  lon: casual.double(-83.9508699, -83.9608699)
 }));
 
 const mocks = {
   Query: () => ({
     nodes: () =>
-      new MockList([2, 6], () => ({
-        name: casual.name,
+      new MockList([4, 16], () => ({
+        name: () => `Node ${casual.letter.toLocaleUpperCase()}`,
         pose: () => ({
           position: (casual as any).position,
           orientation: () => ({
