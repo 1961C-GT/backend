@@ -1,37 +1,50 @@
-import * as express from 'express';
-import { ApolloServer, MockList } from 'apollo-server-express';
-import * as fs from 'fs';
-import * as https from 'https';
-import * as http from 'http';
-import * as casual from "casual";
+import * as express from "express";
+import { ApolloServer } from "apollo-server-express";
+import * as fs from "fs";
+import * as https from "https";
 import typeDefs from "./schema";
 
-casual.define("position", () => ({
-  // Lock coordinates around Chattahoochee Bay
-  // 34.2112456, -83.9658699
-  lat: casual.double(34.2112456, 34.2212456),
-  lon: casual.double(-83.9508699, -83.9608699)
-}));
-
-const mocks = {
-  Query: () => ({
-    nodes: () =>
-      new MockList([4, 16], () => ({
-        name: () => `Node ${casual.letter.toLocaleUpperCase()}`,
-        pose: () => ({
-          position: (casual as any).position,
-          orientation: () => ({
-            heading: casual.double(0, 360)
-          })
-        }),
-        telemetry: () => ({
-          groundSpeed: casual.double(0, 20)
-        })
-      }))
-  })
+let datums = {
+  nodes: {}
 };
 
-const apollo = new ApolloServer({ typeDefs, mocks });
+const resolvers = {
+  Query: {
+    nodes() {
+      return Object.values(datums.nodes);
+    }
+  },
+  Mutation: {
+    updateNode(parent, { id, node }) {
+      if (!datums.nodes[id]) {
+        datums.nodes[id] = node;
+        datums.nodes[id].id = id;
+        if (!node.type) {
+          datums.nodes[id].type = "MOBILE";
+        }
+        return datums.nodes[id];
+      }
+      if (node.pose) {
+        node.pose.position &&
+          Object.assign(datums.nodes[id].pose.position, node.pose.position);
+        node.pose.orientation &&
+          Object.assign(
+            datums.nodes[id].pose.orientation,
+            node.pose.orientation
+          );
+      }
+      if (node.telemetry) {
+        Object.assign(datums.nodes[id].telemetry, node.telemetry);
+      }
+      return datums.nodes[id];
+    },
+    clearNodes() {
+      datums.nodes = {};
+    }
+  }
+};
+
+const apollo = new ApolloServer({ typeDefs, resolvers });
 
 const app = express();
 apollo.applyMiddleware({ app });
@@ -39,15 +52,17 @@ apollo.applyMiddleware({ app });
 // Create the HTTPS or HTTP server, per configuration
 const server = https.createServer(
   {
-    key: fs.readFileSync('/etc/letsencrypt/live/mnslac.xtriage.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/mnslac.xtriage.com/cert.pem')
+    key: fs.readFileSync(
+      "/etc/letsencrypt/live/mnslac.xtriage.com/privkey.pem"
+    ),
+    cert: fs.readFileSync("/etc/letsencrypt/live/mnslac.xtriage.com/cert.pem")
   },
   app
 );
 
 server.listen(4000, () =>
   console.log(
-    '🚀 Server ready at',
+    "🚀 Server ready at",
     `https://localhost:4000${apollo.graphqlPath}`
   )
 );

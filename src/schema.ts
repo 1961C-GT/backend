@@ -6,12 +6,24 @@ const typeDefs = gql`
     node(id: ID!): Node
   }
 
+  type Mutation {
+    updateNode(id: ID!, node: NodeInput!): Node
+    clearNodes: Boolean
+  }
+
   type Node {
     id: ID!
     type: NodeType!
     name: String
     pose: NodePose
     telemetry: NodeTelemetry
+  }
+
+  input NodeInput {
+    type: NodeType
+    name: String
+    pose: NodePoseInput
+    telemetry: NodeTelemetryInput
   }
 
   enum NodeType {
@@ -25,12 +37,27 @@ const typeDefs = gql`
     orientation: NodeOrientation
   }
 
+  input NodePoseInput {
+    position: NodePositionInput
+    orientation: NodeOrientationInput
+  }
+
   type NodePosition {
     lat: Float!
     lon: Float!
   }
 
+  input NodePositionInput {
+    lat: Float!
+    lon: Float!
+  }
+
   type NodeOrientation {
+    heading: Float!
+    source: NodeOrientationSource
+  }
+
+  input NodeOrientationInput {
     heading: Float!
     source: NodeOrientationSource
   }
@@ -41,6 +68,11 @@ const typeDefs = gql`
   }
 
   type NodeTelemetry {
+    groundSpeed: Float #
+    # Other telemetry data goes here
+  }
+
+  input NodeTelemetryInput {
     groundSpeed: Float #
     # Other telemetry data goes here
   }
