@@ -20,7 +20,7 @@ const resolvers = {
         // Add new node structure
         datums.nodes[id] = {
           id: id,
-          type: node.type,
+          type: node.type || "BASE",
           name: node.name,
           pose: (node.pose && {
             position: (node.pose.position && {
@@ -55,10 +55,26 @@ const resolvers = {
         };
       }
 
+      console.log("--------------------");
+      console.log("--------------------");
+      console.log("--------------------");
+      console.log(datums.nodes[id]);
+      console.log("--------------------");
+      console.log(node);
+      console.log("--------------------");
       merge(datums.nodes[id], node);
+      console.log(datums.nodes[id]);
+      console.log("--------------------");
+      console.log("--------------------");
+      console.log("--------------------");
       return datums.nodes[id];
     },
     clearNodes() {
+      console.log("********************");
+      console.log("********************");
+      console.log("********************");
+      console.log("********************");
+      console.log("********************");
       datums.nodes = {};
     }
   }
