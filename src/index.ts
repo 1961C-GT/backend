@@ -55,26 +55,10 @@ const resolvers = {
         };
       }
 
-      console.log("--------------------");
-      console.log("--------------------");
-      console.log("--------------------");
-      console.log(datums.nodes[id]);
-      console.log("--------------------");
-      console.log(node);
-      console.log("--------------------");
       merge(datums.nodes[id], node);
-      console.log(datums.nodes[id]);
-      console.log("--------------------");
-      console.log("--------------------");
-      console.log("--------------------");
       return datums.nodes[id];
     },
     clearNodes() {
-      console.log("********************");
-      console.log("********************");
-      console.log("********************");
-      console.log("********************");
-      console.log("********************");
       datums.nodes = {};
     }
   }
