@@ -65,15 +65,20 @@ const typeDefs = gql`
   enum NodeOrientationSource {
     POSITION
     TELEMETRY
+    UNKNOWN
   }
 
   type NodeTelemetry {
     groundSpeed: Float #
+    temp: Float
+    batt: Float
     # Other telemetry data goes here
   }
 
   input NodeTelemetryInput {
     groundSpeed: Float #
+    temp: Float
+    batt: Float
     # Other telemetry data goes here
   }
 `;
