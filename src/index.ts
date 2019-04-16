@@ -25,10 +25,12 @@ const resolvers = {
           pose: (node.pose && {
             position: (node.pose.position && {
               lat: node.pose.position.lat || 0.0,
-              lon: node.pose.position.lon || 0.0
+              lon: node.pose.position.lon || 0.0,
+              accuracy: node.pose.position.accuracy || 0.0
             }) || {
               lat: 0.0,
-              lon: 0.0
+              lon: 0.0,
+              accuracy: 0.0
             },
             orientation: (node.pose.orientation && {
               heading: node.pose.orientation.heading || 0.0,
@@ -40,7 +42,8 @@ const resolvers = {
           }) || {
             position: {
               lat: 0.0,
-              lon: 0.0
+              lon: 0.0,
+              accuracy: 0.0
             },
             orientation: {
               heading: 0.0,

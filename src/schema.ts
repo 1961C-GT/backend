@@ -45,11 +45,13 @@ const typeDefs = gql`
   type NodePosition {
     lat: Float!
     lon: Float!
+    accuracy: Float!
   }
 
   input NodePositionInput {
     lat: Float!
     lon: Float!
+    accuracy: Float!
   }
 
   type NodeOrientation {
